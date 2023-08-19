@@ -1,0 +1,41 @@
+import { Button, VerticalBox , TextEdit} from "std-widgets.slint";
+import { Theme } from "theme.slint";
+import { SmallMain } from "small_main.slint";
+import { MidMain } from "mid_main.slint";
+
+export component AppWindow inherits Window {
+    in-out property<int> temperature: 0;
+
+    private property <length> big-break-point: 1366px;
+    private property <length> mid-break-point: 799px;
+
+    private property <bool> show-big: root.width >= big-break-point;
+    private property <bool> show-mid: root.width >= mid-break-point && root.width < big-break-point;
+    private property <bool> show-small: !show-big && !show-mid;
+
+    title: "EnergyMNG Demo";
+    min-width: 320px;
+    min-height: 240px;
+    background: Theme.palette.pure-black;
+    preferred-width: 800px;
+    preferred-height: 480px;
+
+    if show-mid || show-big : MidMain {
+        preferred-width: 100%;
+        preferred-height: 100%;
+    }
+
+    if show-small : SmallMain {
+        preferred-width: 100%;
+        preferred-height: 100%;
+    }
+
+
+    VerticalBox {
+        Text {
+            text: "CPU temperature: \{root.temperature}°C";
+            color: white;
+            font-size: 64px;
+        }
+    }
+}
