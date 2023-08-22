@@ -1,55 +1,10 @@
 export struct Palette {
-    // primary
-    slint-blue: brush,
-    pure-black: brush,
-    dark-deep-blue: brush,
-    shark-gray: brush,
-    limon-green: brush,
-    limon-green-op10: brush,
-    white: brush,
-    dimmer: brush,
-
-    // slint blue
-    slint-blue-50: brush,
-    slint-blue-100: brush,
-    slint-blue-200: brush,
-    slint-blue-300: brush,
-    slint-blue-400: brush,
-    slint-blue-500: brush,
-    slint-blue-600: brush,
-    slint-blue-700: brush,
-    slint-blue-800: brush,
-    slint-blue-900: brush,
-
-    // limon green
-    lime-green-50: brush,
-    lime-green-100: brush,
-    lime-green-200: brush,
-    lime-green-300: brush,
-    lime-green-400: brush,
-    lime-green-500: brush,
-    lime-green-600: brush,
-    lime-green-700: brush,
-    lime-green-800: brush,
-    lime-green-900: brush,
+    main-background: brush,
+    snakes-color: brush,
 
     // gradients
     turquoise_gradient: brush,
-    gray-gradient: brush,
-    limon-green-radial-gradient: brush,
-    slint-blue-gradient: brush,
-    heliotrope-gradient: brush,
-    dark-left-gradient: brush,
-    dark-right-gradient: brush,
-    ebony-radial-gradient: brush,
-    bar-gradient: brush,
-    alternative-bar-gradient: brush,
-    alternative-light-bar-gradient: brush,
-    inverted-bar-gradient: brush,
-    inverted-alternative-bar-gradient: brush,
-    bar-background-gradient: brush,
-    tab-gradient: brush,
-    background-gradient: brush,
+    gray-gradient: brush
 }
 
 export struct Spaces {
@@ -83,39 +38,8 @@ export struct Typo {
 
 export global Theme {
     in property <Palette> palette: {
-        // primary
-        slint-blue: #0025FF,
-        pure-black: #000000,
-        dark-deep-blue: #040708,
-        shark-gray: #2C2F36,
-        limon-green: #DEFB3A,
-        limon-green-op10: #defb3a1a,
-        white: #FFFFFF,
-        dimmer: #0000007b,
-
-        // slint blue
-        slint-blue-50: #EEE6FF,
-        slint-blue-100: #D0C3FF,
-        slint-blue-200: #AF9AFF,
-        slint-blue-300: #896FFF,
-        slint-blue-400: #654EFF,
-        slint-blue-500: #2F2AFF,
-        slint-blue-600: #0025FF,
-        slint-blue-700: #001FF7,
-        slint-blue-800: #0019F2,
-        slint-blue-900: #000AEF,
-
-        // limon gren
-        lime-green-50: #FBFFE6,
-        lime-green-100: #F4FDC0,
-        lime-green-200: #EBFC93,
-        lime-green-300: #E2FA63,
-        lime-green-400: #DEFB3A,
-        lime-green-500: #D6F800,
-        lime-green-600: #CBE600,
-        lime-green-700: #BBCF00,
-        lime-green-800: #ACB700,
-        lime-green-900: #D9D9D9,
+        main-background: #22262fff,
+        snakes-color: #ffffff0D,
 
         // gradients
         turquoise_gradient: @radial-gradient(circle, #11bca94D 0%, #00000000 100%),
