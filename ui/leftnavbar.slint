@@ -1,0 +1,113 @@
+import { Logo } from "navbar/logo.slint";
+import { Title } from "navbar/title.slint";
+import { VerticalBox } from "std-widgets.slint";
+import { Tab, TabsExtended } from "navbar/tabs.slint";
+import { Theme } from "theme.slint";
+
+component TabText inherits Text {
+    font-family: "Rubik";
+    font-size: 16px;
+    font-weight: 400;
+    horizontal-alignment: center;
+    vertical-alignment: center;
+    letter-spacing: 0px;
+    color: #ffffffff;
+    animate color { duration: Theme.durations.fast; }
+}
+
+component Tab inherits VerticalLayout {
+    callback tabselect();
+    in property <Tab> tab;
+    in property <Tab> selected-tab;
+    in property <bool> active: tab == selected-tab;
+    in property <string> tab-text;
+    
+    Rectangle { /* Rectangle 1 */
+        width: 100%;
+        height: 75px;
+        border-radius: 16px;
+        background: Theme.palette.transparent;
+        // 
+        TabText { /* Dashboard */
+            text: tab-text;
+            color: active? Theme.palette.left-tab-text : Theme.palette.inactive-text;
+        }
+        TouchArea {
+            clicked => {tabselect()}
+            mouse-cursor: MouseCursor.pointer;
+        }
+    }
+}
+
+component TabSelector inherits Rectangle {
+    in property <Tab> selected-tab;
+    y: selected-tab.position;
+    animate y { duration: Theme.durations.fast; }
+}
+
+export component LeftNavBar inherits Rectangle { 
+    in-out property <Tab> selected-tab;
+    VerticalLayout {
+        padding-top: 46px;
+        padding-left: 34px;
+        HorizontalLayout {
+            Logo {  }
+            Title {  }
+        }
+
+        Tab {
+            padding-top: 48px;
+            tab: TabsExtended.cpu-tab;
+            tab-text: "CPU usage";
+            selected-tab: selected-tab;
+            tabselect => {
+                selected-tab = self.tab
+            }
+        }
+        Tab {
+            padding-top: 12px;
+            tab: TabsExtended.ram-tab;
+            tab-text: "RAM usage";
+            selected-tab: selected-tab;
+            tabselect => {
+                selected-tab = self.tab
+            }
+        }
+        Tab {
+            padding-top: 12px;
+            tab: TabsExtended.temp-tab;
+            tab-text: "Temperature";
+            selected-tab: selected-tab;
+            tabselect => {
+                selected-tab = self.tab
+            }
+        }
+        Tab {
+            padding-top: 12px;
+            tab: TabsExtended.gpu-tab;
+            tab-text: "Graphics";
+            selected-tab: selected-tab;
+            tabselect => {
+                selected-tab = self.tab
+            }
+        }
+        Tab {
+            padding-top: 12px;
+            tab: TabsExtended.stor-tab;
+            tab-text: "Storage";
+            selected-tab: selected-tab;
+            tabselect => {
+                selected-tab = self.tab
+            }
+        }
+        Rectangle {}
+    }
+    TabSelector {
+        x: 0px;
+        selected-tab: selected-tab;
+        width: 300px;
+        height: 75px;
+        border-radius: 16px;
+        background: Theme.palette.tab-gradient;
+    }
+}

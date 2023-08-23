@@ -1,0 +1,35 @@
+enum Tabs {
+    CPU,
+    RAM,
+    Temperature,
+    Graphics,
+    Storage
+}
+
+export struct Tab {
+    type: Tabs,
+    position: length,
+}
+
+export global TabsExtended {
+    in property <Tab> cpu-tab: {
+        type: Tabs.CPU,
+        position: 144px
+    };
+    in property <Tab> ram-tab: {
+        type: Tabs.RAM,
+        position: 231px
+    };
+    in property <Tab> temp-tab: {
+        type: Tabs.Temperature,
+        position: 318px
+    };
+    in property <Tab> gpu-tab: {
+        type: Tabs.Graphics,
+        position: 405px
+    };
+    in property <Tab> stor-tab: {
+        type: Tabs.Storage,
+        position: 492px
+    };
+}

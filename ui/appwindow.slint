@@ -1,8 +1,13 @@
 import { Button, VerticalBox , TextEdit} from "std-widgets.slint";
 import { Theme } from "theme.slint";
 import { Background } from "background.slint";
+import { LeftNavBar } from "leftnavbar.slint";
+import { Tab, TabsExtended } from "navbar/tabs.slint";
+
+
 
 export component Dashboard inherits Window {
+    in-out property <Tab> selected-tab: TabsExtended.cpu-tab;
     title: "System metrics tracker";
     background: Theme.palette.main-background;
     min-width: 320px;
@@ -10,17 +15,21 @@ export component Dashboard inherits Window {
     preferred-width: 1440px;
     preferred-height: 1033px;
     // no-frame: true;
-    Rectangle { /* Home */
+    Background {
         width: 100%;
         height: 100%;
+    }
+    LeftNavBar { 
         x: 0px;
         y: 0px;
-        background: Theme.palette.main-background;
-        clip: true;
-        Background {
-            width: 100%;
-            height: 100%;
-        }
+        width: 300px;
+        height: 100%;
+        selected-tab: selected-tab;
+    }
+    
+    
+        
+        /*
         id_11-537 := Rectangle { /* Frame 35 */
             width: 289px;
             height: 893.6542px;
@@ -31,85 +40,6 @@ export component Dashboard inherits Window {
                 height: 662.6542px;
                 x: 0px;
                 y: 0px;
-                id_2-26 := Rectangle { /* Frame 4 */
-                    width: 289px;
-                    height: 76.91162px;
-                    x: 0px;
-                    y: 0px;
-                    id_2-27 := Rectangle { /* Frame 5 */
-                        width: 29.506958px;
-                        height: 50.583374px;
-                        x: 34px;
-                        y: 13.164124px;
-                        id_6-27 := Rectangle { /* Frame 1 */
-                            width: 29.506958px;
-                            height: 50.583374px;
-                            x: 0px;
-                            y: 0px;
-                            id_6-28 := Rectangle { /* Line 3 */
-                                width: 4.215282px;
-                                height: 27.399353px;
-                                x: -4.215271px;
-                                y: 23.184021px;
-                                background: #cf2458ff;
-                            }
-                            id_6-29 := Rectangle { /* Line 2 */
-                                width: 4.215282px;
-                                height: 40.045166px;
-                                x: 10.538208px;
-                                y: 10.538208px;
-                                background: #10bca8ff;
-                            }
-                            id_6-30 := Rectangle { /* Line 1 */
-                                width: 4.215282px;
-                                height: 50.583374px;
-                                x: 25.291626px;
-                                y: 0px;
-                                background: #f3bc72ff;
-                            }
-                        }
-                    }
-                    id_6-26 := Rectangle { /* Frame 16 */
-                        width: 198px;
-                        height: 76.91162px;
-                        x: 89.609314px;
-                        y: 0px;
-                        
-                            id_2-22 := Text { /* PAM */
-                                x: 0px;
-                                y: 11.348877px;
-                                text: "SMT";
-                                font-family: "Raleway";
-                                font-size: 24.96744px;
-                                font-weight: 700;
-                                horizontal-alignment: left;
-                                vertical-alignment: top;
-                                letter-spacing: 0px;
-                                color: #ffffffff;
-                            }
-                        
-                        id_2-24 := Rectangle { /* Frame 3 */
-                            width: 250px;
-                            height: 37.697693px;
-                            x: 0px;
-                            y: 39.21393px;
-                            id_2-25 := Text { /* ( Purchase account management ) */
-                                width: 250px;
-                                height: 15px;
-                                x: 0px;
-                                y: 11.348816px;
-                                text: "System metrics tracker";
-                                font-family: "Raleway";
-                                font-size: 12.48372px;
-                                font-weight: 400;
-                                horizontal-alignment: left;
-                                vertical-alignment: top;
-                                letter-spacing: 0px;
-                                color: #ffffffff;
-                            }
-                        }
-                    }
-                }
                 id_4-162 := Rectangle { /* Group 6 */
                     width: 220px;
                     height: 505.74255px;
@@ -842,6 +772,7 @@ export component Dashboard inherits Window {
                 }
             }
         }
+        */
         /*
         id_11-540 := Rectangle { /* Frame 37 */
             width: 1044.2107px;
@@ -1723,5 +1654,5 @@ export component Dashboard inherits Window {
             }
         }
         */
-    }
+    
 }

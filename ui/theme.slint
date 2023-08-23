@@ -1,10 +1,14 @@
 export struct Palette {
     main-background: brush,
     snakes-color: brush,
+    left-tab-text: brush,
+    inactive-text: brush,
+    transparent: brush,
 
     // gradients
     turquoise_gradient: brush,
-    gray-gradient: brush
+    gray-gradient: brush,
+    tab-gradient: brush
 }
 
 export struct Spaces {
@@ -40,10 +44,14 @@ export global Theme {
     in property <Palette> palette: {
         main-background: #22262fff,
         snakes-color: #ffffff0D,
+        left-tab-text: #ffffff,
+        inactive-text: #8b8c91,
+        transparent: #00000000,
 
         // gradients
         turquoise_gradient: @radial-gradient(circle, #11bca94D 0%, #00000000 100%),
-        gray-gradient: @radial-gradient(circle, #414b634D 0%, #00000000 100%)
+        gray-gradient: @radial-gradient(circle, #414b634D 0%, #00000000 100%),
+        tab-gradient: @linear-gradient(-92.25084deg, #ffffff36 0, #ffffff00 1)
     };
 
     in property <Spaces> spaces: {
