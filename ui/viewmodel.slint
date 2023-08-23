@@ -1,0 +1,10 @@
+import { Tab, TabsExtended } from "navbar/tabs.slint";
+
+export global MainViewModel {
+    in-out property <Tab> selected-tab: TabsExtended.cpu-tab;
+    callback select-tab(Tab);
+
+    function selecttab(tab: Tab) {
+        selected-tab = tab
+    }
+}

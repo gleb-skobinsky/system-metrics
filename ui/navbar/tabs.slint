@@ -9,27 +9,33 @@ enum Tabs {
 export struct Tab {
     type: Tabs,
     position: length,
+    name: string
 }
 
 export global TabsExtended {
     in property <Tab> cpu-tab: {
         type: Tabs.CPU,
-        position: 144px
+        position: 144px,
+        name: "CPU usage"
     };
     in property <Tab> ram-tab: {
         type: Tabs.RAM,
-        position: 231px
+        position: 231px,
+        name: "RAM usage"
     };
     in property <Tab> temp-tab: {
         type: Tabs.Temperature,
-        position: 318px
+        position: 318px,
+        name: "Temperature"
     };
     in property <Tab> gpu-tab: {
         type: Tabs.Graphics,
-        position: 405px
+        position: 405px,
+        name: "Graphics"
     };
     in property <Tab> stor-tab: {
         type: Tabs.Storage,
-        position: 492px
+        position: 492px,
+        name: "Storage"
     };
 }
