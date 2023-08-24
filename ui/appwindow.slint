@@ -4,7 +4,46 @@ import { Background } from "background.slint";
 import { LeftNavBar } from "leftnavbar.slint";
 import { Tab, TabsExtended } from "navbar/tabs.slint";
 import { MainViewModel } from "viewmodel.slint";
-import { Body } from "metrics/body.slint";
+
+export global TemperatureAdapter {
+    in property <string> path : "M 0 -49.11776 L 10 -83.026955 L 20 -33.79947 L 30 -71.174576 L 40 -35.25389 L 50 -10.087065 L 60 -17.922752 L 70 -11.060492 L 80 -42.082947 L 90 -88.81958 L 100 -90.19678 L 110 -58.19712 L 120 -95.63516 L 130 -39.202328 L 140 -85.81927 L 150 -58.09329 L 160 -45.52039 L 170 -30.17162 L 180 -86.82001 L 190 -78.49321";
+}
+
+component Body inherits VerticalLayout { 
+    in property <Tab> selected-tab;
+    padding-left: 24px;
+    padding-top: 64px;
+    Text {
+        // width: 100%;
+        max-height: 100px;
+        text: selected-tab.name;
+        font-family: "Raleway";
+        font-size: 30px;
+        font-weight: 700;
+        horizontal-alignment: left;
+        vertical-alignment: top;
+        letter-spacing: 0px;
+        color: #ffffffff;
+        overflow: TextOverflow.elide;
+    }
+
+    VerticalLayout {
+        width: 100%;
+        padding-top: 25px;
+        padding-right: 25px;
+        padding-bottom: 25px;
+        Rectangle {
+            x: 0px;
+            background: #2d313b99;
+            border-radius: 30px;
+            Path {
+                commands: TemperatureAdapter.path;
+                stroke-width: 2px;
+                stroke: red;
+            }
+        }
+    }
+}
 
 export component Dashboard inherits Window {
     title: "System metrics tracker";
