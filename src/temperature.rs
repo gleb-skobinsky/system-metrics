@@ -1,8 +1,11 @@
-use rand::Rng;
+use std::sync::mpsc::Receiver;
 use std::thread;
 use std::thread::JoinHandle;
+
+use rand::Rng;
 use slint;
 use slint::ComponentHandle;
+
 use crate::ui;
 
 fn generate_svg(values: &[f32]) -> String {
@@ -28,15 +31,15 @@ fn update_vector(vector: &mut Vec<f32>) {
     vector.push(new_value);
 }
 
-pub fn setup(window: &ui::Dashboard) -> JoinHandle<()> {
+pub fn setup<T: Send + 'static>(window: &ui::Dashboard, receiver: Receiver<T>) -> JoinHandle<()> {
     let window_weak = window.as_weak();
 
     thread::spawn(move ||
-        worker_loop(window_weak)
+        worker_loop(window_weak, receiver)
     )
 }
 
-fn worker_loop(window_weak: slint::Weak<ui::Dashboard>) {
+fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>) {
     let mut vector: Vec<f32> = Vec::with_capacity(20);
     let mut path: String = "".to_string();
 
@@ -48,6 +51,10 @@ fn worker_loop(window_weak: slint::Weak<ui::Dashboard>) {
     display_current(window_weak.clone(), path);
 
     loop {
+        match receiver.try_recv() {
+            Ok(_) => { break; }
+            Err(_) => {}
+        }
         update_vector(&mut vector);
         path = generate_svg(&vector);
         display_current(window_weak.clone(), path);
