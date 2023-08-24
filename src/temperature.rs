@@ -1,8 +1,6 @@
 use std::sync::mpsc::Receiver;
 use std::thread;
 use std::thread::JoinHandle;
-
-use rand::Rng;
 use slint;
 use slint::ComponentHandle;
 use sysinfo::{CpuExt, System, SystemExt};
@@ -42,14 +40,13 @@ pub fn setup<T: Send + 'static>(window: &ui::Dashboard, receiver: Receiver<T>) -
 
 fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>) {
     let mut vector: Vec<f32> = Vec::with_capacity(20);
-    let mut path: String = "".to_string();
     let mut sys = System::new();
     let usage = get_cpu_usage(&mut sys);
 
     for _ in 0..20 {
         vector.push(usage.clone());
     }
-    path = generate_svg(&vector);
+    let mut path  = generate_svg(&vector);
     display_current(window_weak.clone(), path);
 
     loop {
