@@ -12,6 +12,7 @@ slint = "1.0"
 rand = "0.8.4"
 tokio = { version = "1.25", optional = true, features = ["full"] }
 futures = { version = "0.3.26", optional = true }
+sysinfo = "0.29.8"
 
 [build-dependencies]
 slint-build = "1.0"

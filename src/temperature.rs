@@ -5,6 +5,7 @@ use std::thread::JoinHandle;
 use rand::Rng;
 use slint;
 use slint::ComponentHandle;
+use sysinfo::{CpuExt, System, SystemExt};
 
 use crate::ui;
 
@@ -23,16 +24,16 @@ fn generate_svg(values: &[f32]) -> String {
     svg
 }
 
-fn update_vector(vector: &mut Vec<f32>) {
-    let mut rng = rand::thread_rng();
-    let new_value = rng.gen_range(10.0..=100.0);
+fn update_vector(vector: &mut Vec<f32>, sys: &mut System) {
+    let usage = get_cpu_usage(sys);
 
     vector.remove(0);
-    vector.push(new_value);
+    vector.push(usage);
 }
 
 pub fn setup<T: Send + 'static>(window: &ui::Dashboard, receiver: Receiver<T>) -> JoinHandle<()> {
     let window_weak = window.as_weak();
+
 
     thread::spawn(move ||
         worker_loop(window_weak, receiver)
@@ -42,12 +43,13 @@ pub fn setup<T: Send + 'static>(window: &ui::Dashboard, receiver: Receiver<T>) -
 fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>) {
     let mut vector: Vec<f32> = Vec::with_capacity(20);
     let mut path: String = "".to_string();
+    let mut sys = System::new();
+    let usage = get_cpu_usage(&mut sys);
 
     for _ in 0..20 {
-        let value: f32 = rand::thread_rng().gen_range(10.0..=100.0);
-        vector.push(value);
-        path = generate_svg(&vector);
+        vector.push(usage.clone());
     }
+    path = generate_svg(&vector);
     display_current(window_weak.clone(), path);
 
     loop {
@@ -55,11 +57,32 @@ fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>
             Ok(_) => { break; }
             Err(_) => {}
         }
-        update_vector(&mut vector);
+        update_vector(&mut vector, &mut sys);
         path = generate_svg(&vector);
         display_current(window_weak.clone(), path);
-        thread::sleep(std::time::Duration::from_secs(1));
+        thread::sleep(System::MINIMUM_CPU_UPDATE_INTERVAL);
     }
+}
+
+fn get_cpu_usage(sys: &mut System) -> f32 {
+    sys.refresh_cpu();
+    let mut usage: Vec<f32> = Vec::new();
+    for cpu in sys.cpus() {
+        usage.push(cpu.cpu_usage());
+    }
+    return average(usage);
+}
+
+fn average(numbers: Vec<f32>) -> f32 {
+    // Remember how many numbers we were passed.
+    let nnumbers = numbers.len() as f32;
+    let mut sum = 0.0;
+    // This will consume the numbers.
+    for n in numbers {
+        sum += n;
+    }
+    // Average (arithmetic mean) is sum divided by count.
+    sum / nnumbers
 }
 
 fn display_current(window_weak: slint::Weak<ui::Dashboard>, path: String) {
