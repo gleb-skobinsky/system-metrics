@@ -1,11 +1,13 @@
+use std::rc::Rc;
 use std::sync::mpsc::Receiver;
 use std::thread;
 use std::thread::JoinHandle;
-use slint;
-use slint::ComponentHandle;
-use sysinfo::{CpuExt, System, SystemExt};
-use crate::math::average;
 
+use slint;
+use slint::{ComponentHandle, SharedString, VecModel};
+use sysinfo::{CpuExt, System, SystemExt};
+
+use crate::math::average;
 use crate::ui;
 
 fn generate_svg(values: &[f32]) -> String {
@@ -23,41 +25,40 @@ fn generate_svg(values: &[f32]) -> String {
     svg
 }
 
-fn update_vector(vector: &mut Vec<f32>, sys: &mut System) {
-    let usage = get_cpu_usage(sys);
-
-    vector.remove(0);
-    vector.push(usage);
-}
-
 pub fn setup<T: Send + 'static>(window: &ui::Dashboard, receiver: Receiver<T>) -> JoinHandle<()> {
     let window_weak = window.as_weak();
-
-
     thread::spawn(move ||
         worker_loop(window_weak, receiver)
     )
 }
 
 fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>) {
-    let mut vector: Vec<f32> = Vec::with_capacity(20);
     let mut sys = System::new();
-    let usage = get_cpu_usage(&mut sys);
-
-    for _ in 0..20 {
-        vector.push(usage.clone());
+    let mut chart = Vec::default();
+    sys.refresh_cpu();
+    for cpu in sys.cpus() {
+        let mut vector: Vec<f32> = Vec::with_capacity(20);
+        let usage = cpu.cpu_usage();
+        for _ in 0..20 {
+            vector.push(usage.clone());
+        }
+        chart.push(vector);
     }
-    let mut path  = generate_svg(&vector);
-    display_current(window_weak.clone(), path);
 
     loop {
         match receiver.try_recv() {
             Ok(_) => { break; }
             Err(_) => {}
         }
-        update_vector(&mut vector, &mut sys);
-        path = generate_svg(&vector);
-        display_current(window_weak.clone(), path);
+
+        sys.refresh_cpu();
+        let cpus = sys.cpus();
+        for (i, cpu) in cpus.iter().enumerate() {
+            let usage = cpu.cpu_usage();
+            chart[i].remove(0);
+            chart[i.clone()].push(usage);
+        }
+        display_current(window_weak.clone(), chart.clone());
         thread::sleep(System::MINIMUM_CPU_UPDATE_INTERVAL);
     }
 }
@@ -71,12 +72,21 @@ fn get_cpu_usage(sys: &mut System) -> f32 {
     return average(usage);
 }
 
-fn display_current(window_weak: slint::Weak<ui::Dashboard>, path: String) {
+fn chart_to_chart_model(chart: &Vec<Vec<f32>>) -> VecModel<SharedString> {
+    let chart_model = VecModel::default();
+    for line in chart {
+        chart_model.push(SharedString::from(generate_svg(&line)))
+    }
+    return chart_model;
+}
+
+
+fn display_current(window_weak: slint::Weak<ui::Dashboard>, chart: Vec<Vec<f32>>) {
     window_weak
         .upgrade_in_event_loop(move |window| {
             window
                 .global::<ui::MainViewModel>()
-                .set_cpu_data(slint::SharedString::from(path));
+                .set_cpu_data(Rc::new(chart_to_chart_model(&chart)).into());
         })
         .unwrap();
 }

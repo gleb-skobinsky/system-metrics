@@ -11,7 +11,7 @@ export global MainViewModel {
         selected-tab = tab
     }
 
-    in property <string> cpu-data : "M 0 0";
+    in property <[string]> cpu-data : ["M 0 0"];
 }
 
 export component Body inherits VerticalLayout {
@@ -43,7 +43,7 @@ export component Body inherits VerticalLayout {
             border-radius: 30px;
             Path {
                 commands: selected-tab == TabsExtended.cpu-tab? 
-                    MainViewModel.cpu-data : 
+                    MainViewModel.cpu-data[0] :
                     selected-tab == TabsExtended.gpu-tab? 
                     "M 0 0 L 10 10" : "M 0 0";
                 stroke-width: 2px;
