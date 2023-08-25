@@ -86,7 +86,7 @@ fn display_current(window_weak: slint::Weak<ui::Dashboard>, path: String) {
     window_weak
         .upgrade_in_event_loop(move |window| {
             window
-                .global::<ui::TemperatureAdapter>()
+                .global::<ui::CpuAdapter>()
                 .set_path(slint::SharedString::from(path));
         })
         .unwrap();
