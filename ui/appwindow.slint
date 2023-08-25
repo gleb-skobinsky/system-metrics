@@ -2,6 +2,8 @@ import { Theme } from "theme.slint";
 import { Background } from "background.slint";
 import { LeftNavBar } from "leftnavbar.slint";
 import { Tab, TabsExtended } from "tabs.slint";
+import { ChartColors } from "chartcolors.slint";
+import { VerticalBox , ScrollView, ListView} from "std-widgets.slint";
 
 export global MainViewModel {
     in-out property <Tab> selected-tab: TabsExtended.cpu-tab;
@@ -11,7 +13,11 @@ export global MainViewModel {
         selected-tab = tab
     }
 
-    in property <[string]> cpu-data : ["M 0 0"];
+    in property <[string]> cpu-data : [
+        "M 0 -30.000002 L 10 -33.333336 L 20 -35 L 30 -31.578945 L 40 -35 L 50 -35 L 60 -35 L 70 -35 L 80 -31.578945 L 90 -31.578945 L 100 -35 L 110 -35 L 120 -31.578945 L 130 -35 L 140 -36.363636 L 150 -33.333336 L 160 -31.578945 L 170 -26.31579 L 180 -38.095238 L 190 -31.578945",
+        "M 0 -31.578945 L 10 -33.333336 L 20 -40 L 30 -31.578945 L 40 -38 L 50 -42 L 60 -27 L 70 -35 L 80 -35.578945 L 90 -31.578945 L 100 -35 L 110 -35 L 120 -40 L 130 -38.095238 L 140 -31.578945 L 150 -35 L 160 -45 L 170 -30.000002 L 180 -35 L 190 -40 ",
+        "M 0 -35 L 10 -27.777779 L 20 -38.095238 L 30 -36.842106 L 40 -35 L 50 -38.095238 L 60 -35 L 70 -38.095238 L 80 -35 L 90 -35 L 100 -38.095238 L 110 -36.842106 L 120 -36.842106 L 130 -31.578945 L 140 -35 L 150 -31.578945 L 160 -36.842106 L 170 -30.000002 L 180 -38.095238 L 190 -35 ",
+    ];
 }
 
 export component Body inherits VerticalLayout {
@@ -19,7 +25,6 @@ export component Body inherits VerticalLayout {
     padding-left: 24px;
     padding-top: 64px;
     Text {
-        // width: 100%;
         max-height: 100px;
         text: selected-tab.name;
         font-family: "Raleway";
@@ -34,17 +39,75 @@ export component Body inherits VerticalLayout {
 
     VerticalLayout {
         width: 100%;
-        padding-top: 25px;
+        padding-top: 70px;
         padding-right: 25px;
         padding-bottom: 25px;
         Rectangle {
             x: 0px;
             background: #2d313b99;
             border-radius: 30px;
-            if (selected-tab == TabsExtended.cpu-tab): Path {
-                commands: MainViewModel.cpu-data[0];
-                stroke-width: 2px;
-                stroke: red;
+            if (selected-tab == TabsExtended.cpu-tab): VerticalLayout {
+                padding: 25px;
+                HorizontalLayout {
+                    Rectangle {
+                        width: 70%;
+                        height: self.width / 1.9;
+                        background: Theme.palette.chart-background;
+                        border-radius: 15px;
+                        for idx in MainViewModel.cpu-data.length: Path {
+                            viewbox-width: 190;
+                            viewbox-height: -100;
+                            commands: "M 0 0 M 190 0 M 0 -100 M 190 -100 " + MainViewModel.cpu-data[idx];
+                            stroke-width: 2px;
+                            stroke: ChartColors.colors[idx];
+                        }
+                        Path {
+                            viewbox-width: 190;
+                            viewbox-height: -100;
+                            commands: "M 0 0 M 190 0 M 0 -10 L 190 -10 M 0 -20 L 190 -20 M 0 -30 L 190 -30 M 0 -40 L 190 -40 M 0 -50 L 190 -50 M 0 -60 L 190 -60 M 0 -70 L 190 -70 M 0 -80 L 190 -80 M 0 -90 L 190 -90 M 0 -100 M 190 -100";
+                            stroke: Theme.palette.chart-lines;
+                            stroke-width: 2px;
+                        }
+                    } 
+                    VerticalLayout {
+                        padding-left: 32px;
+                        Text {
+                            text: "CPU cores:";
+                            color: white;
+                            font-size: 18px;
+                            vertical-alignment: TextVerticalAlignment.center;
+                        }
+                        Rectangle {
+                            height: 20px;
+                        }
+                        ListView { 
+                            for idx in MainViewModel.cpu-data.length: HorizontalLayout {
+                                padding-bottom: 12px;
+                                VerticalBox {
+                                    Rectangle {
+                                        width: 10px;
+                                        height: 10px;
+                                        border-radius: 5px;
+                                        drop-shadow-offset-x: 3px;
+                                        drop-shadow-offset-y: 3px;
+                                        drop-shadow-blur: 5px;
+                                        drop-shadow-color: Theme.palette.chart-background;
+                                        background: ChartColors.colors[idx];
+                                    }
+                                }
+                                Rectangle {
+                                    width: 10px;
+                                }
+                                Text {
+                                    text: "Core " + (idx + 1);
+                                    color: white;
+                                    font-size: 18px;
+                                    vertical-alignment: TextVerticalAlignment.center;
+                                }
+                            }
+                        }
+                    }
+                }              
             }
         }
     }
@@ -57,6 +120,7 @@ export component Dashboard inherits Window {
     min-height: 10px;
     preferred-width: 1440px;
     preferred-height: 900px;
+    
     icon: @image-url("images/appicon.png");
     // no-frame: true;
     Background {

@@ -7,23 +7,8 @@ use slint;
 use slint::{ComponentHandle, SharedString, VecModel};
 use sysinfo::{CpuExt, System, SystemExt};
 
-use crate::math::average;
 use crate::ui;
-
-fn generate_svg(values: &[f32]) -> String {
-    let mut svg = String::new();
-    let mut x = 0;
-
-    for (i, value) in values.iter().enumerate() {
-        let mut mark = "L";
-        if i == 0 {
-            mark = "M"
-        }
-        svg.push_str(&format!("{} {} {} ", mark, x, -value));
-        x += 10;
-    }
-    svg
-}
+use crate::svg::generate_svg;
 
 pub fn setup<T: Send + 'static>(window: &ui::Dashboard, receiver: Receiver<T>) -> JoinHandle<()> {
     let window_weak = window.as_weak();
@@ -63,15 +48,6 @@ fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>
     }
 }
 
-fn get_cpu_usage(sys: &mut System) -> f32 {
-    sys.refresh_cpu();
-    let mut usage: Vec<f32> = Vec::new();
-    for cpu in sys.cpus() {
-        usage.push(cpu.cpu_usage());
-    }
-    return average(usage);
-}
-
 fn chart_to_chart_model(chart: &Vec<Vec<f32>>) -> VecModel<SharedString> {
     let chart_model = VecModel::default();
     for line in chart {
@@ -84,9 +60,10 @@ fn chart_to_chart_model(chart: &Vec<Vec<f32>>) -> VecModel<SharedString> {
 fn display_current(window_weak: slint::Weak<ui::Dashboard>, chart: Vec<Vec<f32>>) {
     window_weak
         .upgrade_in_event_loop(move |window| {
+            let model = chart_to_chart_model(&chart);
             window
                 .global::<ui::MainViewModel>()
-                .set_cpu_data(Rc::new(chart_to_chart_model(&chart)).into());
+                .set_cpu_data(Rc::new(model).into());
         })
         .unwrap();
 }
