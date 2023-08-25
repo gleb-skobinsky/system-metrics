@@ -1,4 +1,6 @@
 mod temperature;
+mod math;
+
 pub mod ui {
     slint::include_modules!();
 }

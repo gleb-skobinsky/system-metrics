@@ -4,6 +4,7 @@ use std::thread::JoinHandle;
 use slint;
 use slint::ComponentHandle;
 use sysinfo::{CpuExt, System, SystemExt};
+use crate::math::average;
 
 use crate::ui;
 
@@ -70,24 +71,12 @@ fn get_cpu_usage(sys: &mut System) -> f32 {
     return average(usage);
 }
 
-fn average(numbers: Vec<f32>) -> f32 {
-    // Remember how many numbers we were passed.
-    let nnumbers = numbers.len() as f32;
-    let mut sum = 0.0;
-    // This will consume the numbers.
-    for n in numbers {
-        sum += n;
-    }
-    // Average (arithmetic mean) is sum divided by count.
-    sum / nnumbers
-}
-
 fn display_current(window_weak: slint::Weak<ui::Dashboard>, path: String) {
     window_weak
         .upgrade_in_event_loop(move |window| {
             window
-                .global::<ui::CpuAdapter>()
-                .set_path(slint::SharedString::from(path));
+                .global::<ui::MainViewModel>()
+                .set_cpu_data(slint::SharedString::from(path));
         })
         .unwrap();
 }

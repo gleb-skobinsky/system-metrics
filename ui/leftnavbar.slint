@@ -1,9 +1,7 @@
 import { Logo } from "navbar/logo.slint";
 import { Title } from "navbar/title.slint";
-import { VerticalBox } from "std-widgets.slint";
 import { Tab, TabsExtended } from "tabs.slint";
 import { Theme } from "theme.slint";
-import { MainViewModel } from "viewmodel.slint";
 
 component TabText inherits Text {
     font-family: "Rubik";
@@ -16,7 +14,7 @@ component TabText inherits Text {
     animate color { duration: Theme.durations.fast; }
 }
 
-component Tab inherits VerticalLayout {
+component TabWidget inherits VerticalLayout {
     callback tabselect();
     in property <Tab> tab;
     in property <Tab> selected-tab;
@@ -47,7 +45,7 @@ component TabSelector inherits Rectangle {
 
 export component LeftNavBar inherits Rectangle { 
     in-out property <Tab> selected-tab;
-    callback select-tab();
+    callback select-tab(Tab);
     VerticalLayout {
         padding-top: 46px;
         padding-left: 34px;
@@ -57,44 +55,44 @@ export component LeftNavBar inherits Rectangle {
             Title {  }
         }
 
-        Tab {
+        TabWidget {
             padding-top: 48px;
             tab: TabsExtended.cpu-tab;
             selected-tab: selected-tab;
             tabselect => {
-                MainViewModel.selecttab(self.tab)
+                select-tab(self.tab)
             }
         }
-        Tab {
+        TabWidget {
             padding-top: 12px;
             tab: TabsExtended.ram-tab;
             selected-tab: selected-tab;
             tabselect => {
-                MainViewModel.selecttab(self.tab)
+                select-tab(self.tab)
             }
         }
-        Tab {
+        TabWidget {
             padding-top: 12px;
             tab: TabsExtended.temp-tab;
             selected-tab: selected-tab;
             tabselect => {
-                MainViewModel.selecttab(self.tab)
+                select-tab(self.tab)
             }
         }
-        Tab {
+        TabWidget {
             padding-top: 12px;
             tab: TabsExtended.gpu-tab;
             selected-tab: selected-tab;
             tabselect => {
-                MainViewModel.selecttab(self.tab)
+                select-tab(self.tab)
             }
         }
-        Tab {
+        TabWidget {
             padding-top: 12px;
             tab: TabsExtended.stor-tab;
             selected-tab: selected-tab;
             tabselect => {
-                MainViewModel.selecttab(self.tab)
+                select-tab(self.tab)
             }
         }
         Rectangle {}
