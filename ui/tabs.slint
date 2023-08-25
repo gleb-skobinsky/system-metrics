@@ -1,0 +1,29 @@
+
+
+export struct Tab {
+    position: length,
+    name: string
+}
+
+export global TabsExtended {
+    in property <Tab> cpu-tab: {
+        position: 144px,
+        name: "CPU usage"
+    };
+    in property <Tab> ram-tab: {
+        position: 231px,
+        name: "RAM usage"
+    };
+    in property <Tab> temp-tab: {
+        position: 318px,
+        name: "Temperature"
+    };
+    in property <Tab> gpu-tab: {
+        position: 405px,
+        name: "Graphics"
+    };
+    in property <Tab> stor-tab: {
+        position: 492px,
+        name: "Storage"
+    };
+}
