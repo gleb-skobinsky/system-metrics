@@ -41,11 +41,8 @@ export component Body inherits VerticalLayout {
             x: 0px;
             background: #2d313b99;
             border-radius: 30px;
-            Path {
-                commands: selected-tab == TabsExtended.cpu-tab? 
-                    MainViewModel.cpu-data[0] :
-                    selected-tab == TabsExtended.gpu-tab? 
-                    "M 0 0 L 10 10" : "M 0 0";
+            if (selected-tab == TabsExtended.cpu-tab): Path {
+                commands: MainViewModel.cpu-data[0];
                 stroke-width: 2px;
                 stroke: red;
             }
