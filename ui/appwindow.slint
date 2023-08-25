@@ -1,15 +1,10 @@
-import { Button, VerticalBox , TextEdit, HorizontalBox} from "std-widgets.slint";
-import { Theme } from "theme.slint";
-import { Background } from "background.slint";
-import { LeftNavBar } from "leftnavbar.slint";
 import { Tab, TabsExtended } from "navbar/tabs.slint";
-import { MainViewModel } from "viewmodel.slint";
 
 export global CpuAdapter {
     in property <string> path : "M 0 -49.11776 L 10 -83.026955 L 20 -33.79947 L 30 -71.174576 L 40 -35.25389 L 50 -10.087065 L 60 -17.922752 L 70 -11.060492 L 80 -42.082947 L 90 -88.81958 L 100 -90.19678 L 110 -58.19712 L 120 -95.63516 L 130 -39.202328 L 140 -85.81927 L 150 -58.09329 L 160 -45.52039 L 170 -30.17162 L 180 -86.82001 L 190 -78.49321";
 }
 
-component Body inherits VerticalLayout { 
+export component Body inherits VerticalLayout {
     in property <Tab> selected-tab;
     padding-left: 24px;
     padding-top: 64px;
@@ -45,32 +40,3 @@ component Body inherits VerticalLayout {
     }
 }
 
-export component Dashboard inherits Window {
-    title: "System metrics tracker";
-    background: Theme.palette.main-background;
-    min-width: 20px;
-    min-height: 10px;
-    preferred-width: 1440px;
-    preferred-height: 900px;
-    icon: @image-url("images/appicon.png");
-    // no-frame: true;
-    Background {
-        width: 100%;
-        height: 100%;
-    }
-    HorizontalLayout {
-        width: 100%;
-        height: 100%;
-        LeftNavBar { 
-            y: 0px;
-            width: 30%;
-            height: 100%;
-            selected-tab: MainViewModel.selected-tab;
-        }
-            
-        Body {
-            width: 70%;
-            selected-tab: MainViewModel.selected-tab;
-        }
-    }    
-}
