@@ -54,6 +54,7 @@ export component Body inherits VerticalLayout {
                         height: self.width / 1.9;
                         background: Theme.palette.chart-background;
                         border-radius: 15px;
+                        clip: true;
                         for idx in MainViewModel.cpu-data.length: Path {
                             viewbox-width: 190;
                             viewbox-height: -100;
