@@ -6,6 +6,7 @@ import { ChartColors } from "chartcolors.slint";
 import { VerticalBox , ScrollView, ListView } from "std-widgets.slint";
 import { CpuWidget } from "cpuscreen/widget.slint";
 import { Chart } from "cpuscreen/chart.slint";
+import { TemperatureWidget } from "temperaturescreen/widget.slint";
 
 export global MainViewModel {
     in-out property <Tab> selected-tab: TabsExtended.cpu-tab;
@@ -52,7 +53,10 @@ export component Body inherits VerticalLayout {
             background: #2d313b99;
             border-radius: 30px;
             if (selected-tab == TabsExtended.cpu-tab): CpuWidget { data: MainViewModel.cpu-data; } 
-            if (selected-tab == TabsExtended.temp-tab): CpuWidget { data: MainViewModel.temperature-data; }
+            if (selected-tab == TabsExtended.temp-tab): TemperatureWidget { 
+                data: MainViewModel.temperature-data; 
+                components: MainViewModel.components;
+            }
         }
     }
 }

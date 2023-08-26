@@ -50,7 +50,7 @@ pub fn display_components(
     window_weak
         .upgrade_in_event_loop(move |window| {
             let vm = window.global::<ui::MainViewModel>();
-            vm.set_cpu_data(Rc::new(vec_to_vec_model(components)).into());
+            vm.set_components(Rc::new(vec_to_vec_model(components)).into());
         })
         .unwrap();
 }

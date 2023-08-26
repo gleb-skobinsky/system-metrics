@@ -26,8 +26,7 @@ fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>
     let mut temp_chart: Vec<Vec<f32>> = Vec::default();
     init_cpu(&mut sys, &mut cpu_chart);
     init_temp(&mut sys, &mut temp_chart);
-    let components = list_components(&mut sys);
-    display_components(&window_weak, components);
+    display_components(&window_weak, list_components(&mut sys));
     loop {
         match receiver.try_recv() {
             Ok(_) => { break; }
