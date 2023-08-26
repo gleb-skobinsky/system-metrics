@@ -63,7 +63,7 @@ fn display_current(window_weak: &slint::Weak<ui::Dashboard>, chart: Vec<Vec<f32>
             let model = chart_to_chart_model(&chart);
             let vm = window.global::<ui::MainViewModel>();
             vm.set_cpu_data(Rc::new(model).into());
-            vm.invoke_refresh_status();
+            
         })
         .unwrap();
 }
