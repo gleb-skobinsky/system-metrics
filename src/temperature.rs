@@ -1,6 +1,8 @@
 use sysinfo::{ComponentExt, System, SystemExt};
 
 pub fn init_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
+    sys.refresh_components_list();
+    sys.refresh_components();
     let sensor_data = sys.components();
     for component in sensor_data {
         let mut vector: Vec<f32> = Vec::with_capacity(20);
@@ -13,7 +15,11 @@ pub fn init_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
 }
 
 pub fn update_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
+    sys.refresh_components();
     let sensor_data = sys.components();
+    for component in sensor_data {
+        println!("{}", component.label().to_string())
+    }
     for (i, component) in sensor_data.iter().enumerate() {
         let temperature = component.temperature();
         temperature_chart[i].remove(0);
