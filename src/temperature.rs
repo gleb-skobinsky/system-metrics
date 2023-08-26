@@ -1,4 +1,4 @@
-use sysinfo::{ComponentExt, CpuExt, System, SystemExt};
+use sysinfo::{ComponentExt, System, SystemExt};
 
 pub fn init_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
     let sensor_data = sys.components();
@@ -13,7 +13,7 @@ pub fn init_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
 }
 
 pub fn update_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
-    let sensor_data = sys.cpus();
+    let sensor_data = sys.components();
     for (i, component) in sensor_data.iter().enumerate() {
         let temperature = component.temperature();
         temperature_chart[i].remove(0);
