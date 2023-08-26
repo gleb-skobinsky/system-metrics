@@ -43,6 +43,7 @@ fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>
             chart[*&i].remove(0);
             chart[*&i].push(usage);
         }
+        
         display_current(&window_weak, chart.clone());
         thread::sleep(Duration::from_secs(1));
     }
@@ -57,12 +58,15 @@ fn chart_to_chart_model(chart: &Vec<Vec<f32>>) -> VecModel<SharedString> {
 }
 
 
-fn display_current(window_weak: &slint::Weak<ui::Dashboard>, chart: Vec<Vec<f32>>) {
+fn display_current(
+    window_weak: &slint::Weak<ui::Dashboard>, 
+    cpu_chart: Vec<Vec<f32>>
+) {
     window_weak
         .upgrade_in_event_loop(move |window| {
-            let model = chart_to_chart_model(&chart);
+            let cpu_model = chart_to_chart_model(&cpu_chart);
             let vm = window.global::<ui::MainViewModel>();
-            vm.set_cpu_data(Rc::new(model).into());
+            vm.set_cpu_data(Rc::new(cpu_model).into());
             
         })
         .unwrap();
