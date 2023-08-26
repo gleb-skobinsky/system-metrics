@@ -1,4 +1,4 @@
-use sysinfo::{ComponentExt, CpuExt, System, SystemExt};
+use sysinfo::{CpuExt, System, SystemExt};
 
 pub fn update_cpu(sys: &mut System, cpu_chart: &mut Vec<Vec<f32>>) {
     sys.refresh_cpu();

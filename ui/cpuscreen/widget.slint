@@ -1,0 +1,62 @@
+import { Theme } from "../theme.slint";
+import { Chart } from "../chart.slint";
+import { VerticalBox, ListView } from "std-widgets.slint";
+import { ChartColors } from "../chartcolors.slint";
+
+export component CpuWidget inherits VerticalLayout {
+    in property <[string]> data;
+    padding: 25px;
+    HorizontalLayout {
+            Rectangle {
+                width: 70%;
+                height: self.width / 1.9;
+                background: Theme.palette.chart-gradient;
+                border-radius: 15px; 
+                clip: true;
+                Chart {
+                    width: 100%;
+                    height: 100%;
+                    x: 0;
+                    data: data;
+                }
+            } 
+            VerticalLayout {
+                padding-left: 32px;
+                Text {
+                    text: "CPU cores:";
+                    color: white;
+                    font-size: 18px;
+                    vertical-alignment: TextVerticalAlignment.center;
+                }
+                Rectangle {
+                    height: 20px;
+                }
+                ListView { 
+                    for idx in data.length: HorizontalLayout {
+                        padding-bottom: 12px;
+                        VerticalBox {
+                            Rectangle {
+                                width: 10px;
+                                height: 10px;
+                                border-radius: 5px;
+                                drop-shadow-offset-x: 3px;
+                                drop-shadow-offset-y: 3px;
+                                drop-shadow-blur: 5px;
+                                drop-shadow-color: Theme.palette.chart-background;
+                                background: ChartColors.colors[idx];
+                            }
+                        }
+                        Rectangle {
+                            width: 10px;
+                        }
+                        Text {
+                            text: "Core " + (idx + 1);
+                            color: white;
+                            font-size: 18px;
+                            vertical-alignment: TextVerticalAlignment.center;
+                        }
+                    }
+                }
+            }
+    }              
+}

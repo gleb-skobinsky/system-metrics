@@ -4,6 +4,7 @@ import { LeftNavBar } from "leftnavbar.slint";
 import { Tab, TabsExtended } from "tabs.slint";
 import { ChartColors } from "chartcolors.slint";
 import { VerticalBox , ScrollView, ListView } from "std-widgets.slint";
+import { CpuWidget } from "cpuscreen/widget.slint";
 
 export global MainViewModel {
     in-out property <Tab> selected-tab: TabsExtended.cpu-tab;
@@ -20,81 +21,6 @@ export global MainViewModel {
     ];
 
     in-out property <[string]> temperature-data : [];
-}
-
-export component Chart inherits Rectangle {
-    in property <[string]> data;
-    for idx in data.length: Path {
-        viewbox-width: 190;
-        viewbox-height: -100;
-        commands: "M 0 0 M 190 0 M 0 -100 M 190 -100 " + MainViewModel.cpu-data[idx];
-        stroke-width: 2px;
-        stroke: ChartColors.colors[idx];
-    }
-    Path {
-        viewbox-width: 190;
-        viewbox-height: -100;
-        commands: "M 0 0 M 190 0 M 0 -10 L 190 -10 M 0 -20 L 190 -20 M 0 -30 L 190 -30 M 0 -40 L 190 -40 M 0 -50 L 190 -50 M 0 -60 L 190 -60 M 0 -70 L 190 -70 M 0 -80 L 190 -80 M 0 -90 L 190 -90 M 0 -100 M 190 -100";
-        stroke: Theme.palette.chart-lines;
-        stroke-width: 2px;
-    }
-}
-
-component CpuWidget inherits VerticalLayout {
-    in property <[string]> data;
-    padding: 25px;
-    HorizontalLayout {
-            Rectangle {
-                width: 70%;
-                height: self.width / 1.9;
-                background: Theme.palette.chart-gradient;
-                border-radius: 15px; 
-                clip: true;
-                Chart {
-                    width: 100%;
-                    height: 100%;
-                    x: 0;
-                }
-            } 
-            VerticalLayout {
-                padding-left: 32px;
-                Text {
-                    text: "CPU cores:";
-                    color: white;
-                    font-size: 18px;
-                    vertical-alignment: TextVerticalAlignment.center;
-                }
-                Rectangle {
-                    height: 20px;
-                }
-                ListView { 
-                    for idx in MainViewModel.cpu-data.length: HorizontalLayout {
-                        padding-bottom: 12px;
-                        VerticalBox {
-                            Rectangle {
-                                width: 10px;
-                                height: 10px;
-                                border-radius: 5px;
-                                drop-shadow-offset-x: 3px;
-                                drop-shadow-offset-y: 3px;
-                                drop-shadow-blur: 5px;
-                                drop-shadow-color: Theme.palette.chart-background;
-                                background: ChartColors.colors[idx];
-                            }
-                        }
-                        Rectangle {
-                            width: 10px;
-                        }
-                        Text {
-                            text: "Core " + (idx + 1);
-                            color: white;
-                            font-size: 18px;
-                            vertical-alignment: TextVerticalAlignment.center;
-                        }
-                    }
-                }
-            }
-    }              
 }
 
 export component Body inherits VerticalLayout {

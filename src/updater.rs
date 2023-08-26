@@ -6,7 +6,7 @@ use std::time::Duration;
 
 use slint;
 use slint::{ComponentHandle, SharedString, VecModel};
-use sysinfo::{ComponentExt, CpuExt, System, SystemExt};
+use sysinfo::{System, SystemExt};
 use crate::cpu::{init_cpu, update_cpu};
 
 use crate::ui;
