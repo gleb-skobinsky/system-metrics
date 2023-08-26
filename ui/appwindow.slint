@@ -5,6 +5,7 @@ import { Tab, TabsExtended } from "tabs.slint";
 import { ChartColors } from "chartcolors.slint";
 import { VerticalBox , ScrollView, ListView } from "std-widgets.slint";
 import { CpuWidget } from "cpuscreen/widget.slint";
+import { Chart } from "cpuscreen/chart.slint";
 
 export global MainViewModel {
     in-out property <Tab> selected-tab: TabsExtended.cpu-tab;
@@ -21,6 +22,25 @@ export global MainViewModel {
     ];
 
     in-out property <[string]> temperature-data : [];
+}
+
+component TemperatureChart {
+    in property <[string]> data;
+    HorizontalLayout {
+        Rectangle {
+            width: 70%;
+            height: self.width / 1.9;
+            background: Theme.palette.chart-gradient;
+            border-radius: 15px; 
+            clip: true;
+            Chart {
+                width: 100%;
+                height: 100%;
+                x: 0;
+                data: data;
+            }
+        } 
+    }
 }
 
 export component Body inherits VerticalLayout {
@@ -49,10 +69,8 @@ export component Body inherits VerticalLayout {
             x: 0px;
             background: #2d313b99;
             border-radius: 30px;
-            if (selected-tab == TabsExtended.cpu-tab): 
-            CpuWidget {
-                data: MainViewModel.cpu-data;
-            }
+            if (selected-tab == TabsExtended.cpu-tab): CpuWidget { data: MainViewModel.cpu-data; } 
+            if (selected-tab == TabsExtended.temp-tab): CpuWidget { data: MainViewModel.temperature-data; }
         }
     }
 }

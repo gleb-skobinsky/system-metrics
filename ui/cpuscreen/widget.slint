@@ -1,12 +1,12 @@
 import { Theme } from "../theme.slint";
-import { Chart } from "../chart.slint";
+import { Chart } from "chart.slint";
 import { VerticalBox, ListView } from "std-widgets.slint";
 import { ChartColors } from "../chartcolors.slint";
 
 export component CpuWidget inherits VerticalLayout {
     in property <[string]> data;
     padding: 25px;
-    HorizontalLayout {
+        HorizontalLayout {
             Rectangle {
                 width: 70%;
                 height: self.width / 1.9;
@@ -58,5 +58,5 @@ export component CpuWidget inherits VerticalLayout {
                     }
                 }
             }
-    }              
+        }              
 }
