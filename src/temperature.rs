@@ -26,7 +26,7 @@ pub fn list_components(sys: &mut System) -> Vec<String> {
 }
 
 fn vec_to_vec_model(values: Vec<String>) -> VecModel<SharedString> {
-    let mut model = VecModel::default();
+    let model = VecModel::default();
     for value in values {
         model.push(SharedString::from(value))
     }
