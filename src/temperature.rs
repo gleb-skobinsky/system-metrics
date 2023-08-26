@@ -36,9 +36,6 @@ fn vec_to_vec_model(values: Vec<String>) -> VecModel<SharedString> {
 pub fn update_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
     sys.refresh_components();
     let sensor_data = sys.components();
-    for component in sensor_data {
-        println!("{}", component.label().to_string())
-    }
     for (i, component) in sensor_data.iter().enumerate() {
         let temperature = component.temperature();
         temperature_chart[i].remove(0);
