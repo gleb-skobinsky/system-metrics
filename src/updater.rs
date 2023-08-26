@@ -11,7 +11,7 @@ use crate::cpu::{init_cpu, update_cpu};
 
 use crate::ui;
 use crate::svg::generate_svg;
-use crate::temperature::{init_temp, update_temp};
+use crate::temperature::{display_components, init_temp, list_components, update_temp};
 
 pub fn setup<T: Send + 'static>(window: &ui::Dashboard, receiver: Receiver<T>) -> JoinHandle<()> {
     let window_weak = window.as_weak();
@@ -26,6 +26,8 @@ fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>
     let mut temp_chart: Vec<Vec<f32>> = Vec::default();
     init_cpu(&mut sys, &mut cpu_chart);
     init_temp(&mut sys, &mut temp_chart);
+    let components = list_components(&mut sys);
+    display_components(&window_weak, components);
     loop {
         match receiver.try_recv() {
             Ok(_) => { break; }
@@ -46,7 +48,6 @@ fn chart_to_chart_model(chart: &Vec<Vec<f32>>) -> VecModel<SharedString> {
     return chart_model;
 }
 
-
 fn display_current(
     window_weak: &slint::Weak<ui::Dashboard>,
     cpu_chart: Vec<Vec<f32>>,
@@ -62,3 +63,4 @@ fn display_current(
         })
         .unwrap();
 }
+

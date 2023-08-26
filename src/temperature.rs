@@ -1,4 +1,7 @@
+use std::rc::Rc;
+use slint::{ComponentHandle, SharedString, VecModel};
 use sysinfo::{ComponentExt, System, SystemExt};
+use crate::ui;
 
 pub fn init_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
     sys.refresh_components_list();
@@ -14,6 +17,22 @@ pub fn init_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
     }
 }
 
+pub fn list_components(sys: &mut System) -> VecModel<SharedString> {
+    sys.refresh_components_list();
+    let components = sys.components().iter().map(|component|
+        component.label().to_string()
+    ).collect();
+    return vec_to_vec_model(components);
+}
+
+fn vec_to_vec_model(values: Vec<String>) -> VecModel<SharedString> {
+    let mut model = VecModel::default();
+    for value in values {
+        model.push(SharedString::from(value))
+    }
+    return model
+}
+
 pub fn update_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
     sys.refresh_components();
     let sensor_data = sys.components();
@@ -25,4 +44,16 @@ pub fn update_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
         temperature_chart[i].remove(0);
         temperature_chart[i].push(temperature);
     }
+}
+
+pub fn display_components(
+    window_weak: &slint::Weak<ui::Dashboard>,
+    components: VecModel<SharedString>
+) {
+    window_weak
+        .upgrade_in_event_loop(move |window| {
+            let vm = window.global::<ui::MainViewModel>();
+            vm.set_cpu_data(Rc::new(components).into());
+        })
+        .unwrap();
 }
