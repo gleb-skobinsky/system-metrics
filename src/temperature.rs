@@ -17,12 +17,12 @@ pub fn init_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
     }
 }
 
-pub fn list_components(sys: &mut System) -> VecModel<SharedString> {
+pub fn list_components(sys: &mut System) -> Vec<String> {
     sys.refresh_components_list();
     let components = sys.components().iter().map(|component|
         component.label().to_string()
     ).collect();
-    return vec_to_vec_model(components);
+    return components;
 }
 
 fn vec_to_vec_model(values: Vec<String>) -> VecModel<SharedString> {
@@ -48,12 +48,12 @@ pub fn update_temp(sys: &mut System, temperature_chart: &mut Vec<Vec<f32>>) {
 
 pub fn display_components(
     window_weak: &slint::Weak<ui::Dashboard>,
-    components: VecModel<SharedString>
+    components: Vec<String>
 ) {
     window_weak
         .upgrade_in_event_loop(move |window| {
             let vm = window.global::<ui::MainViewModel>();
-            vm.set_cpu_data(Rc::new(components).into());
+            vm.set_cpu_data(Rc::new(vec_to_vec_model(components)).into());
         })
         .unwrap();
 }
