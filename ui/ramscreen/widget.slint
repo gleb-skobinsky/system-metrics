@@ -1,0 +1,41 @@
+import { ChartColors } from "../chartcolors.slint";
+import { Theme } from "../theme.slint";
+import { VerticalBox, ListView } from "std-widgets.slint";
+
+component RamChart inherits Rectangle {
+    in property <string> data;
+    Path {
+        viewbox-width: 190;
+        viewbox-height: -100;
+        commands: "M 0 0 M 190 0 M 0 -100 M 190 -100 " + data;
+        stroke-width: 2px;
+        stroke: ChartColors.colors[5];
+    }
+    Path {
+        viewbox-width: 190;
+        viewbox-height: -100;
+        commands: "M 0 0 M 190 0 M 0 -10 L 190 -10 M 0 -20 L 190 -20 M 0 -30 L 190 -30 M 0 -40 L 190 -40 M 0 -50 L 190 -50 M 0 -60 L 190 -60 M 0 -70 L 190 -70 M 0 -80 L 190 -80 M 0 -90 L 190 -90 M 0 -100 M 190 -100";
+        stroke: Theme.palette.chart-lines;
+        stroke-width: 2px;
+    }
+}
+
+export component RamWidget inherits VerticalLayout {
+    in property <string> data;
+    padding: 25px;
+        HorizontalLayout {
+            Rectangle {
+                width: 70%;
+                height: self.width / 1.9;
+                background: Theme.palette.chart-gradient;
+                border-radius: 15px; 
+                clip: true;
+                RamChart {
+                    width: 100%;
+                    height: 100%;
+                    x: 0;
+                    data: data;
+                }
+            } 
+        }              
+}

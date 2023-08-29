@@ -3,6 +3,7 @@ mod math;
 mod svg;
 mod cpu;
 mod temperature;
+mod ram;
 
 pub mod ui {
     slint::include_modules!();

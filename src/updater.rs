@@ -8,6 +8,7 @@ use slint;
 use slint::{ComponentHandle, SharedString, VecModel};
 use sysinfo::{System, SystemExt};
 use crate::cpu::{init_cpu, update_cpu};
+use crate::ram::{init_ram, update_ram};
 
 use crate::ui;
 use crate::svg::generate_svg;
@@ -23,9 +24,11 @@ pub fn setup<T: Send + 'static>(window: &ui::Dashboard, receiver: Receiver<T>) -
 fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>) {
     let mut sys = System::new();
     let mut cpu_chart: Vec<Vec<f32>> = Vec::default();
+    let mut ram_chart: Vec<f32> = Vec::default();
     let mut temp_chart: Vec<Vec<f32>> = Vec::default();
     init_cpu(&mut sys, &mut cpu_chart);
     init_temp(&mut sys, &mut temp_chart);
+    init_ram(&mut sys, &mut ram_chart);
     display_components(&window_weak, list_components(&mut sys));
     loop {
         match receiver.try_recv() {
@@ -34,7 +37,8 @@ fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>
         }
         update_cpu(&mut sys, &mut cpu_chart);
         update_temp(&mut sys, &mut temp_chart);
-        display_current(&window_weak, cpu_chart.clone(), temp_chart.clone());
+        update_ram(&mut sys, &mut ram_chart);
+        display_current(&window_weak, cpu_chart.clone(), temp_chart.clone(), ram_chart.clone());
         thread::sleep(Duration::from_secs(1));
     }
 }
@@ -47,18 +51,26 @@ fn chart_to_chart_model(chart: &Vec<Vec<f32>>) -> VecModel<SharedString> {
     return chart_model;
 }
 
+fn chart_to_shared_string(chart: &Vec<f32>) -> SharedString {
+    let chart_model = SharedString::from(generate_svg(&chart));
+    return chart_model;
+}
+
 fn display_current(
     window_weak: &slint::Weak<ui::Dashboard>,
     cpu_chart: Vec<Vec<f32>>,
-    temp_chart: Vec<Vec<f32>>
+    temp_chart: Vec<Vec<f32>>,
+    ram_chart: Vec<f32>,
 ) {
     window_weak
         .upgrade_in_event_loop(move |window| {
             let cpu_model = chart_to_chart_model(&cpu_chart);
             let temp_model = chart_to_chart_model(&temp_chart);
+            let ram_model: SharedString = chart_to_shared_string(&ram_chart);
             let vm = window.global::<ui::MainViewModel>();
             vm.set_cpu_data(Rc::new(cpu_model).into());
-            vm.set_temperature_data(Rc::new(temp_model).into())
+            vm.set_temperature_data(Rc::new(temp_model).into());
+            vm.set_ram_data(ram_model);
         })
         .unwrap();
 }
