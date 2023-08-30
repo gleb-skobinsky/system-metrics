@@ -11,7 +11,8 @@ export struct Palette {
     turquoise_gradient: brush,
     gray-gradient: brush,
     tab-gradient: brush,
-    chart-gradient: brush
+    chart-gradient: brush,
+    temperature-gradient: brush
 }
 
 export struct Spaces {
@@ -57,7 +58,8 @@ export global Theme {
         turquoise_gradient: @radial-gradient(circle, #11bca94D 0%, #00000000 100%),
         gray-gradient: @radial-gradient(circle, #414b634D 0%, #00000000 100%),
         tab-gradient: @linear-gradient(-92.25084deg, #ffffff36 0, #ffffff00 1),
-        chart-gradient: @linear-gradient(185deg, #11bca822 0, #0000004e 1)
+        chart-gradient: @linear-gradient(185deg, #11bca822 0, #0000004e 1),
+        temperature-gradient: @linear-gradient(0deg, #1d4ed83d, #65a30d3d, #fbbf243d, #f871713d)
     };
 
     in property <Spaces> spaces: {
