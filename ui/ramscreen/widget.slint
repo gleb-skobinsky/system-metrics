@@ -1,9 +1,16 @@
 import { ChartColors } from "../chartcolors.slint";
 import { Theme } from "../theme.slint";
 import { VerticalBox, ListView } from "std-widgets.slint";
+import { PieChartData } from "../piechart.slint";
+import { Background } from "../background.slint";
+
+global ChartBase {
+    in property <string> base : " M 100, 100 m 100, 0 a 100,100 0 1,0 -200,0 a 100,100 0 1,0  200,0 ";
+}
 
 component RamChart inherits Rectangle {
     in property <string> data;
+    in property <PieChartData> ram-pie-chart;
     Path {
         viewbox-width: 190;
         viewbox-height: -100;
@@ -22,8 +29,11 @@ component RamChart inherits Rectangle {
 
 export component RamWidget inherits VerticalLayout {
     in property <string> data;
+    in property <PieChartData> ram-pie-chart;
+    private property <int> sector: ram-pie-chart.percentage > 50.0 ? 1 : 0;
     padding: 25px;
-        HorizontalLayout {
+    alignment: LayoutAlignment.start;
+    HorizontalLayout {
             Rectangle {
                 width: 70%;
                 height: self.width / 1.9;
@@ -37,5 +47,49 @@ export component RamWidget inherits VerticalLayout {
                     data: data;
                 }
             } 
-        }              
+    }  
+    Rectangle {
+        width: 20px;
+        height: 20px;
+    }
+    Text {
+        text: "Used memory:";
+        color: white;
+        font-size: 16px;
+    }
+    Rectangle {
+        height: 12px;
+    }
+    VerticalLayout {
+        height: 30%;
+        width: self.height;
+        alignment: LayoutAlignment.center;
+        Rectangle {
+            height: 100%;
+            width: 100%;
+            Path {
+                height: 100%;
+                width: 100%;
+                commands: ChartBase.base;
+                stroke: Theme.palette.pie-chart-base;
+                stroke-width: 20px;
+                viewbox-width: 200;
+                viewbox-height: 200;
+            }
+            Path {
+                height: 100%;
+                width: 100%;
+                commands: "M 200 100 A 100 100 0 \{sector} 1 \{ram-pie-chart.angleX} \{ram-pie-chart.angleY}";
+                stroke: Theme.palette.chart-used;
+                stroke-width: 20px;
+                viewbox-width: 200;
+                viewbox-height: 200;
+            }
+            Text {
+                color: white;
+                text: ram-pie-chart.percentage + "%";
+                font-size: 16px;
+            }
+        }        
+    }    
 }

@@ -8,6 +8,7 @@ import { CpuWidget } from "cpuscreen/widget.slint";
 import { Chart } from "cpuscreen/chart.slint";
 import { TemperatureWidget } from "temperaturescreen/widget.slint";
 import { RamWidget } from "ramscreen/widget.slint";
+import { PieChartData, DefaultPieChart } from "piechart.slint";
 
 export global MainViewModel {
     in-out property <Tab> selected-tab: TabsExtended.cpu-tab;
@@ -26,6 +27,7 @@ export global MainViewModel {
     in-out property <[string]> temperature-data : [];
     in-out property <[string]> components : [];
     in-out property <string> ram-data : "";
+    in-out property <PieChartData> ram-pie-chart : DefaultPieChart.chart;
 }
 
 export component Body inherits VerticalLayout {
@@ -61,6 +63,7 @@ export component Body inherits VerticalLayout {
             }
             if (selected-tab == TabsExtended.ram-tab): RamWidget { 
                 data: MainViewModel.ram-data;
+                ram-pie-chart: MainViewModel.ram-pie-chart;
              }
         }
     }

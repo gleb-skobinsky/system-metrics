@@ -1,0 +1,25 @@
+export struct PieChartData {
+    percentage: float,
+    angleX: int,
+    angleY: int
+}
+
+export global DefaultPieChart {
+    in property <PieChartData> chart : {
+        percentage: 0.0,
+        angleX: 100,
+        angleY: 200
+    };
+}
+
+export struct PieChartDisplay {
+    majorRadius: int,
+    minorRadius: int
+}
+
+export global DefaultPieChartDisplay {
+    in property <PieChartDisplay> display : {
+        majorRadius: 100,
+        minorRadius: 100
+    };
+}

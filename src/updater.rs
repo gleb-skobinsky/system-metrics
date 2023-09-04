@@ -13,6 +13,7 @@ use crate::ram::{init_ram, update_ram};
 use crate::ui;
 use crate::svg::generate_svg;
 use crate::temperature::{display_components, init_temp, list_components, update_temp};
+use crate::ui::PieChartData;
 
 pub fn setup<T: Send + 'static>(window: &ui::Dashboard, receiver: Receiver<T>) -> JoinHandle<()> {
     let window_weak = window.as_weak();
@@ -37,8 +38,8 @@ fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>
         }
         update_cpu(&mut sys, &mut cpu_chart);
         update_temp(&mut sys, &mut temp_chart);
-        update_ram(&mut sys, &mut ram_chart);
-        display_current(&window_weak, cpu_chart.clone(), temp_chart.clone(), ram_chart.clone());
+        let ram_pie_chart = update_ram(&mut sys, &mut ram_chart);
+        display_current(&window_weak, cpu_chart.clone(), temp_chart.clone(), ram_chart.clone(), ram_pie_chart);
         thread::sleep(Duration::from_secs(1));
     }
 }
@@ -61,16 +62,18 @@ fn display_current(
     cpu_chart: Vec<Vec<f32>>,
     temp_chart: Vec<Vec<f32>>,
     ram_chart: Vec<f32>,
+    ram_pie_chart: PieChartData
 ) {
     window_weak
         .upgrade_in_event_loop(move |window| {
-            let cpu_model = chart_to_chart_model(&cpu_chart);
-            let temp_model = chart_to_chart_model(&temp_chart);
+            let cpu_model: VecModel<SharedString> = chart_to_chart_model(&cpu_chart);
+            let temp_model: VecModel<SharedString> = chart_to_chart_model(&temp_chart);
             let ram_model: SharedString = chart_to_shared_string(&ram_chart);
-            let vm = window.global::<ui::MainViewModel>();
+            let vm: ui::MainViewModel<'_> = window.global::<ui::MainViewModel>();
             vm.set_cpu_data(Rc::new(cpu_model).into());
             vm.set_temperature_data(Rc::new(temp_model).into());
             vm.set_ram_data(ram_model);
+            vm.set_ram_pie_chart(ram_pie_chart);
         })
         .unwrap();
 }

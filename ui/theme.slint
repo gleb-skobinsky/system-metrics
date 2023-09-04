@@ -6,6 +6,8 @@ export struct Palette {
     transparent: brush,
     chart-background: brush,
     chart-lines: brush,
+    pie-chart-base: brush,
+    chart-used: brush,
 
     // gradients
     turquoise_gradient: brush,
@@ -53,6 +55,9 @@ export global Theme {
         transparent: #00000000,
         chart-background: #00000036,
         chart-lines: #ffffff36,
+        chart-used: #10bca8ff,
+        pie-chart-base: @linear-gradient(0deg, #00000000 0, #427a8ab3 1),
+
 
         // gradients
         turquoise_gradient: @radial-gradient(circle, #11bca94D 0%, #00000000 100%),
