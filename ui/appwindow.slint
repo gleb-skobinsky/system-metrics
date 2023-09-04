@@ -28,6 +28,7 @@ export global MainViewModel {
     in-out property <[string]> components : [];
     in-out property <string> ram-data : "";
     in-out property <PieChartData> ram-pie-chart : DefaultPieChart.chart;
+    in property <PieChartData> swap-pie-chart : DefaultPieChart.chart;
 }
 
 export component Body inherits VerticalLayout {
@@ -64,6 +65,7 @@ export component Body inherits VerticalLayout {
             if (selected-tab == TabsExtended.ram-tab): RamWidget { 
                 data: MainViewModel.ram-data;
                 ram-pie-chart: MainViewModel.ram-pie-chart;
+                swap-pie-chart: MainViewModel.swap-pie-chart;
              }
         }
     }

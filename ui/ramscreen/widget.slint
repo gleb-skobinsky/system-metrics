@@ -27,10 +27,58 @@ component RamChart inherits Rectangle {
     }
 }
 
+component PieChartWidget inherits VerticalLayout {
+    in property <PieChartData> pie-chart-data;
+    in property <string> title;
+    private property <int> sector: pie-chart-data.percentage > 50.0 ? 1 : 0;
+    in property <brush> circle-color;
+    in property <brush> indicator-color;
+
+    Rectangle {
+        width: 20px;
+        height: 20px;
+    }
+    Text {
+        text: title;
+        color: white;
+        font-size: 16px;
+    }
+    Rectangle {
+        height: 12px;
+    }
+    Rectangle {
+        height: 100%;
+        width: 100%;
+        Path {
+            height: 100%;
+            width: 100%;
+            commands: ChartBase.base;
+            stroke: circle-color;
+            stroke-width: 20px;
+            viewbox-width: 200;
+            viewbox-height: 200;
+        }
+        Path {
+            height: 100%;
+            width: 100%;
+            commands: "M 200 100 A 100 100 0 \{sector} 1 \{pie-chart-data.angleX} \{pie-chart-data.angleY}";
+            stroke: indicator-color;
+            stroke-width: 20px;
+            viewbox-width: 200;
+            viewbox-height: 200;
+        }
+        Text {
+            color: white;
+            text: pie-chart-data.percentage + "%";
+            font-size: 16px;
+        }
+    }    
+}
+
 export component RamWidget inherits VerticalLayout {
     in property <string> data;
     in property <PieChartData> ram-pie-chart;
-    private property <int> sector: ram-pie-chart.percentage > 50.0 ? 1 : 0;
+    in property <PieChartData> swap-pie-chart;
     padding: 25px;
     alignment: LayoutAlignment.start;
     HorizontalLayout {
@@ -48,48 +96,30 @@ export component RamWidget inherits VerticalLayout {
                 }
             } 
     }  
-    Rectangle {
-        width: 20px;
-        height: 20px;
-    }
-    Text {
-        text: "Used memory:";
-        color: white;
-        font-size: 16px;
-    }
-    Rectangle {
-        height: 12px;
-    }
-    VerticalLayout {
+
+    HorizontalLayout {
+        width: 100%;
         height: 30%;
-        width: self.height;
-        alignment: LayoutAlignment.center;
-        Rectangle {
+        PieChartWidget {
+            pie-chart-data: ram-pie-chart;
+            circle-color: Theme.palette.turquoise-linear-gradient;
+            indicator-color: Theme.palette.turquoise-chart-indicator;
+            title: "Used memory:";
             height: 100%;
-            width: 100%;
-            Path {
-                height: 100%;
-                width: 100%;
-                commands: ChartBase.base;
-                stroke: Theme.palette.pie-chart-base;
-                stroke-width: 20px;
-                viewbox-width: 200;
-                viewbox-height: 200;
-            }
-            Path {
-                height: 100%;
-                width: 100%;
-                commands: "M 200 100 A 100 100 0 \{sector} 1 \{ram-pie-chart.angleX} \{ram-pie-chart.angleY}";
-                stroke: Theme.palette.chart-used;
-                stroke-width: 20px;
-                viewbox-width: 200;
-                viewbox-height: 200;
-            }
-            Text {
-                color: white;
-                text: ram-pie-chart.percentage + "%";
-                font-size: 16px;
-            }
-        }        
-    }    
+            width: 30%;
+            alignment: LayoutAlignment.center;
+        }
+        Rectangle {
+            width: 20px;
+        }
+        PieChartWidget {
+            pie-chart-data: swap-pie-chart;
+            circle-color: Theme.palette.green-linear-gradient;
+            indicator-color: Theme.palette.green-chart-indicator;
+            title: "Used swap:";
+            height: 100%;
+            width: 30%;
+            alignment: LayoutAlignment.center;
+        }    
+    }
 }

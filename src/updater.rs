@@ -8,7 +8,7 @@ use slint;
 use slint::{ComponentHandle, SharedString, VecModel};
 use sysinfo::{System, SystemExt};
 use crate::cpu::{init_cpu, update_cpu};
-use crate::ram::{init_ram, update_ram};
+use crate::ram::{init_ram, update_ram, update_swap};
 
 use crate::ui;
 use crate::svg::generate_svg;
@@ -26,10 +26,11 @@ fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>
     let mut sys = System::new();
     let mut cpu_chart: Vec<Vec<f32>> = Vec::default();
     let mut ram_chart: Vec<f32> = Vec::default();
+    let mut swap_chart: Vec<f32> = Vec::default();
     let mut temp_chart: Vec<Vec<f32>> = Vec::default();
     init_cpu(&mut sys, &mut cpu_chart);
     init_temp(&mut sys, &mut temp_chart);
-    init_ram(&mut sys, &mut ram_chart);
+    init_ram(&mut sys, &mut ram_chart, &mut swap_chart);
     display_components(&window_weak, list_components(&mut sys));
     loop {
         match receiver.try_recv() {
@@ -39,7 +40,8 @@ fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>
         update_cpu(&mut sys, &mut cpu_chart);
         update_temp(&mut sys, &mut temp_chart);
         let ram_pie_chart = update_ram(&mut sys, &mut ram_chart);
-        display_current(&window_weak, cpu_chart.clone(), temp_chart.clone(), ram_chart.clone(), ram_pie_chart);
+        let swap_pie_chart = update_swap(&mut sys, &mut swap_chart);
+        display_current(&window_weak, cpu_chart.clone(), temp_chart.clone(), ram_chart.clone(), ram_pie_chart, swap_pie_chart);
         thread::sleep(Duration::from_secs(1));
     }
 }
@@ -62,7 +64,8 @@ fn display_current(
     cpu_chart: Vec<Vec<f32>>,
     temp_chart: Vec<Vec<f32>>,
     ram_chart: Vec<f32>,
-    ram_pie_chart: PieChartData
+    ram_pie_chart: PieChartData,
+    swap_pie_chart: PieChartData
 ) {
     window_weak
         .upgrade_in_event_loop(move |window| {
@@ -74,6 +77,7 @@ fn display_current(
             vm.set_temperature_data(Rc::new(temp_model).into());
             vm.set_ram_data(ram_model);
             vm.set_ram_pie_chart(ram_pie_chart);
+            vm.set_swap_pie_chart(swap_pie_chart);
         })
         .unwrap();
 }
