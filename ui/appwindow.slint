@@ -71,7 +71,9 @@ export component Body inherits VerticalLayout {
                 swap-pie-chart: MainViewModel.swap-pie-chart;
             }
             if (selected-tab == TabsExtended.stor-tab): StorageWidget { 
-
+                disks: MainViewModel.disks;
+                width: 100%;
+                height: 100%;
             }
         }
     }

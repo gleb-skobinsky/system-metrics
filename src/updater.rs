@@ -4,7 +4,6 @@ use std::thread;
 use std::thread::JoinHandle;
 use std::time::Duration;
 
-use slint::{self, ModelRc};
 use slint::{ComponentHandle, SharedString, VecModel};
 use sysinfo::{System, SystemExt};
 use crate::cpu::{init_cpu, update_cpu};

@@ -10,6 +10,7 @@ export struct Palette {
     turquoise-chart-indicator: brush,
     green-chart-indicator: brush,
     green-linear-gradient: brush,
+    violet-linear-gradient: brush,
 
     // gradients
     turquoise_gradient: brush,
@@ -68,7 +69,8 @@ export global Theme {
         gray-gradient: @radial-gradient(circle, #414b634D 0%, #00000000 100%),
         tab-gradient: @linear-gradient(-92.25084deg, #ffffff36 0, #ffffff00 1),
         chart-gradient: @linear-gradient(185deg, #11bca822 0, #0000004e 1),
-        temperature-gradient: @linear-gradient(0deg, #1d4ed83d, #65a30d3d, #fbbf243d, #f871713d)
+        temperature-gradient: @linear-gradient(0deg, #1d4ed83d, #65a30d3d, #fbbf243d, #f871713d),
+        violet-linear-gradient: @linear-gradient(90deg, #1d4ed83d, #f1e64488)
     };
 
     in property <Spaces> spaces: {

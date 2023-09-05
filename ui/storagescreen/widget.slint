@@ -1,5 +1,45 @@
+import { DiskData } from "../disk.slint";
+import { Theme } from "../theme.slint";
 
+component DiskBar inherits HorizontalLayout {
+    in property <DiskData> disk;
+    private property <int> disk-load: disk.used * 100;
+    padding-bottom: 36px;
+    Text {
+        width: 20%;
+        text: "\{disk.name}: \n\{disk.volume} Gb";
+        color: white;
+        vertical-alignment: TextVerticalAlignment.center;
+        font-size: 14px;
+        overflow: TextOverflow.clip;
+        wrap: TextWrap.word-wrap;
+    }
+    Rectangle {
+        width: 25px;
+    }
+    HorizontalLayout {
+        Rectangle {
+            width: disk.used;
+            background: Theme.palette.violet-linear-gradient;
+            Text {
+                text: "\{disk-load}%";
+                color: white;
+            }        
+        }
+        Rectangle {
+            background: @linear-gradient(90deg, #000f923d, #0000003d);
+        }
+    }
+}
 
 export component StorageWidget inherits VerticalLayout {
-    
+    in property <[DiskData]> disks;
+    padding: 30px;
+    for disk in disks: DiskBar {
+        disk: disk;
+        preferred-height: 50px;
+        max-height: 100px;
+        width: 90%;
+    }
 }
+
