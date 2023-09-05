@@ -5,6 +5,7 @@ mod cpu;
 mod temperature;
 mod ram;
 mod piechart;
+mod storage;
 
 pub mod ui {
     slint::include_modules!();

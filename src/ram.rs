@@ -52,6 +52,6 @@ pub fn update_swap(sys: &mut System, swap_chart: &mut Vec<f32>) -> PieChartData 
 }
 
 
-fn round2(value: f32) -> f32 {
+pub fn round2(value: f32) -> f32 {
     return (value * 100.0).round() / 100.0;
 }

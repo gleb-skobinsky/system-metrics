@@ -1,0 +1,14 @@
+
+export struct DiskData {
+    name: string,
+    volume: float,
+    used: int    
+}
+
+export global DiskDefault {
+    in property <DiskData> disk : {
+        name: "",
+        volume: 0.0,
+        used: 0
+    };
+}

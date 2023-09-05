@@ -9,6 +9,8 @@ import { Chart } from "cpuscreen/chart.slint";
 import { TemperatureWidget } from "temperaturescreen/widget.slint";
 import { RamWidget } from "ramscreen/widget.slint";
 import { PieChartData, DefaultPieChart } from "piechart.slint";
+import { StorageWidget } from "storagescreen/widget.slint";
+import { DiskData, DiskDefault } from "disk.slint";
 
 export global MainViewModel {
     in-out property <Tab> selected-tab: TabsExtended.cpu-tab;
@@ -29,6 +31,7 @@ export global MainViewModel {
     in-out property <string> ram-data : "";
     in-out property <PieChartData> ram-pie-chart : DefaultPieChart.chart;
     in property <PieChartData> swap-pie-chart : DefaultPieChart.chart;
+    in property <[DiskData]> disks : [DiskDefault.disk, DiskDefault.disk];
 }
 
 export component Body inherits VerticalLayout {
@@ -66,7 +69,10 @@ export component Body inherits VerticalLayout {
                 data: MainViewModel.ram-data;
                 ram-pie-chart: MainViewModel.ram-pie-chart;
                 swap-pie-chart: MainViewModel.swap-pie-chart;
-             }
+            }
+            if (selected-tab == TabsExtended.stor-tab): StorageWidget { 
+
+            }
         }
     }
 }
