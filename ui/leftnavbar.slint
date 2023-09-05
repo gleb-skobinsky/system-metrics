@@ -81,14 +81,6 @@ export component LeftNavBar inherits Rectangle {
         }
         TabWidget {
             padding-top: 12px;
-            tab: TabsExtended.gpu-tab;
-            selected-tab: selected-tab;
-            tabselect => {
-                select-tab(self.tab)
-            }
-        }
-        TabWidget {
-            padding-top: 12px;
             tab: TabsExtended.stor-tab;
             selected-tab: selected-tab;
             tabselect => {
