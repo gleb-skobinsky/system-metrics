@@ -41,7 +41,14 @@ fn worker_loop<T>(window_weak: slint::Weak<ui::Dashboard>, receiver: Receiver<T>
         update_temp(&mut sys, &mut temp_chart);
         let ram_pie_chart = update_ram(&mut sys, &mut ram_chart);
         let swap_pie_chart = update_swap(&mut sys, &mut swap_chart);
-        display_current(&window_weak, cpu_chart.clone(), temp_chart.clone(), ram_chart.clone(), ram_pie_chart, swap_pie_chart);
+        display_current(
+            &window_weak, 
+            cpu_chart.clone(), 
+            temp_chart.clone(), 
+            ram_chart.clone(), 
+            ram_pie_chart, 
+            swap_pie_chart
+        );
         thread::sleep(Duration::from_secs(1));
     }
 }
